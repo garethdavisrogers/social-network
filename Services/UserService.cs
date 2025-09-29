@@ -4,28 +4,28 @@ namespace SocialNetworkV1.Services
 {
     public interface IUserService 
     {
-        User? GetUser(string username);
-        User CreateUser(string username);
-        void UpdateUser(User user);
-        void DeleteUser(User user);
+        User? GetUser();
+        User AddUser(string? name, string? email);
+        void UpdateUser(Guid id, User user);
+        void DeleteUser(Guid id);
     }
     public class UserService: IUserService
     {
-        public User GetUser(string username) 
+        public User GetUser() 
         {
             return new User();
         }
 
-        public User CreateUser(string username) 
+        public User AddUser(string? name, string? email) 
         {
-            return new User();
+            return new User(name, email);
         }
 
-        public void UpdateUser(User user) 
+        public void UpdateUser(Guid id, User user) 
         { 
         }
 
-        public void DeleteUser(User user) 
+        public void DeleteUser(Guid id) 
         { 
         }
 
