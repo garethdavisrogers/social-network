@@ -9,7 +9,25 @@ namespace SocialNetworkV1.Services
         void UpdateUser(User user);
         void DeleteUser(User user);
     }
-    public class UserService
+    public class UserService: IUserService
     {
+        public User GetUser(string username) 
+        {
+            return new User();
+        }
+
+        public User CreateUser(string username) 
+        {
+            return new User();
+        }
+
+        public void UpdateUser(User user) 
+        { 
+        }
+
+        public void DeleteUser(User user) 
+        { 
+        }
+
     }
 }

@@ -8,5 +8,12 @@
 
         public string Email { get; set; }
 
+        public User() 
+        {
+            Id = Guid.NewGuid();
+            Name = "NewUser";
+            Email = "user@example.com";
+        }
+
     }
 }
