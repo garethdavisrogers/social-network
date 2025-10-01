@@ -1,32 +1,59 @@
 ﻿using SocialNetworkV1.Models;
+using SocialNetworkV1.Data;
 
 namespace SocialNetworkV1.Services
 {
     public interface IUserService 
     {
-        User? GetUser();
-        User AddUser(string? name, string? email);
-        void UpdateUser(Guid id, User user);
+        User? GetUser(Guid id);
+        User CreateUser(string name, string email);
+        void UpdateUser(Guid id, string? name, string? email);
         void DeleteUser(Guid id);
     }
     public class UserService: IUserService
     {
-        public User GetUser() 
+        private UserDb _userDb;
+
+        public UserService(UserDb userDb)
         {
-            return new User();
+            _userDb = userDb;
         }
 
-        public User AddUser(string? name, string? email) 
+        public User GetUser(Guid id) 
         {
-            return new User(name, email);
+            var user = _userDb.users.Find(id);
+            if (user == null) 
+            {
+                return new User("None", "Found");
+            }
+            return new User("user1", "user@example.com");
         }
 
-        public void UpdateUser(Guid id, User user) 
+        public User CreateUser(string name, string email) 
+        {
+            var createdUser = new User(name, email);
+            _userDb.users.Add(createdUser);
+            return createdUser;
+        }
+
+        public void UpdateUser(Guid id, string? name, string? email) 
         { 
+            var userToUpdate = _userDb.users.Find(id);
+            if (userToUpdate != null) 
+            {
+                userToUpdate.Name = name;
+                userToUpdate.Email = email;
+            }
+            _userDb.SaveChanges();
         }
 
         public void DeleteUser(Guid id) 
-        { 
+        {
+            var userToDelete = _userDb.users.Find(id);
+            if (userToDelete != null) 
+            {
+                _userDb.users.Remove(userToDelete);
+            }
         }
 
     }

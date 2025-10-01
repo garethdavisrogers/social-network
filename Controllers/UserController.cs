@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SocialNetworkV1.Models;
 using SocialNetworkV1.Services;
+using SocialNetworkV1.DTOs.Requests.Users;
 
 namespace SocialNetworkV1.Controllers
 {
@@ -8,24 +9,25 @@ namespace SocialNetworkV1.Controllers
     [Route("user")]
     public class UserController : Controller
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
+        public UserController(IUserService userService) => _userService = userService;
 
-        [HttpGet("{name}")]
-        public ActionResult<User> GetUser()
+        [HttpGet("{id:guid}")]
+        public ActionResult<User> GetUser(Guid id)
         {
-            var user = _userService.GetUser();
+            var user = _userService.GetUser(id);
             return user;
         }
-        [HttpPost("{name}")]
-        public IActionResult AddUser(string name, string email)
+        [HttpPost]
+        public IActionResult CreateUser([FromBody] CreateUserRequest createUserRequest)
         {
-            var user = _userService.AddUser(name, email);
+            var user = _userService.CreateUser(createUserRequest.Name, createUserRequest.Email);
             return Ok(user);
         }
-        [HttpPut("{id}")]
-        public IActionResult UpdateUser(Guid id, User user)
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest updateUserRequest)
         {
-            _userService.UpdateUser(id, user);
+            _userService.UpdateUser(id, updateUserRequest.Name, updateUserRequest.Email);
             return Ok();
         }
         [HttpDelete("{id}")]

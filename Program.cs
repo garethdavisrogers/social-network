@@ -7,16 +7,20 @@ using SocialNetworkV1.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<UserDb>(options => options.UseNpgsql("localhost;Port=5432;Database=userdb;Username=postgres;Password=postgres"));
+builder.Services.AddDbContext<UserDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<UserDb>();
+    db.Database.Migrate(); // requires EF.Design + created migrations
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

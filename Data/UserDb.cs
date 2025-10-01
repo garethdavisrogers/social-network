@@ -6,6 +6,6 @@ namespace SocialNetworkV1.Data
     public class UserDb: DbContext
     {
         public UserDb(DbContextOptions options): base(options) { }
-        public DbSet<User> users { get; set; } = null!;
+        public DbSet<User> users => Set<User>();
     }
 }

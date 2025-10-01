@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    container_name: snv1-api
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # ASP.NET binds to 8080/8081 already in your Dockerfile
+      ASPNETCORE_URLS: http://+:8080
+      # Connection string: host is the *service name* "db"
+      ConnectionStrings__Default: Host=db;Port=5432;Database=userdb;Username=postgres;Password=postgres
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    container_name: snv1-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: userdb
+    ports:
+      - "5432:5432"   # optional for connecting from host tools
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d userdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
