@@ -2,8 +2,8 @@ version: "3.9"
 services:
   api:
     build:
-        context: .
-        dockerfile: ./app/Dockerfile
+        context: ./app
+        dockerfile: Dockerfile
     container_name: snv1-api
     ports:
       - "8080:8080"
