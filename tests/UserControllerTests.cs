@@ -6,6 +6,7 @@ using Moq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetworkV1.DTOs.Responses.Users;
+using SocialNetworkV1.DTOs.Requests.Users;
 
 namespace SocialNetworkV1.Tests
 {
@@ -13,10 +14,10 @@ namespace SocialNetworkV1.Tests
     {
         private static UserController SUT(Mock<IUserService> userService) => new UserController(userService.Object);
 
-        public class Get : UserControllerTests 
+        public class Get : UserControllerTests
         {
             [Fact]
-            public void Get_returns_404_when_user_does_not_exist() 
+            public void Get_returns_404_when_user_does_not_exist()
             {
                 var userService = new Mock<IUserService>();
                 userService.Setup(s => s.GetUser(It.IsAny<Guid>())).Returns((User?)null);
@@ -29,11 +30,11 @@ namespace SocialNetworkV1.Tests
             }
 
             [Fact]
-            public void Get_returns_200_when_user_exists() 
+            public void Get_returns_200_when_user_exists()
             {
                 var user = new User("Alice", "alice@example.com");
                 var userService = new Mock<IUserService>();
-                userService.Setup(s=>s.GetUser(user.Id)).Returns(user);
+                userService.Setup(s => s.GetUser(user.Id)).Returns(user);
 
                 var sut = SUT(userService);
                 ActionResult<GetUserResponse> res = sut.GetUser(user.Id);
@@ -44,6 +45,21 @@ namespace SocialNetworkV1.Tests
 
                 ok.Value.Should().BeOfType<GetUserResponse>()
                    .Which.Email.Should().Be("alice@example.com");
+
+            }
+        }
+
+        public class Post: UserControllerTests
+        {
+            [Fact]
+
+            public void Post_returns_400_when_name_or_email_blank() 
+            {
+                var newUser = new CreateUserRequest { Name = "", Email = "" };
+                var userService = new Mock<IUserService>();
+
+                var sut = SUT(userService);
+                var res = sut.CreateUser(newUser);
 
             }
         }
