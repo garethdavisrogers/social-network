@@ -2,6 +2,7 @@
 using SocialNetworkV1.Models;
 using SocialNetworkV1.Services;
 using SocialNetworkV1.DTOs.Requests.Users;
+using SocialNetworkV1.DTOs.Responses.Users;
 
 namespace SocialNetworkV1.Controllers
 {
@@ -13,16 +14,19 @@ namespace SocialNetworkV1.Controllers
         public UserController(IUserService userService) => _userService = userService;
 
         [HttpGet("{id:guid}")]
-        public ActionResult<User> GetUser(Guid id)
+        public ActionResult<GetUserResponse> GetUser(Guid id)
         {
             var user = _userService.GetUser(id);
-            return user;
+            if (user == null) return NotFound();
+
+            return Ok(new GetUserResponse(user.Name, user.Email, user.Posts));
         }
         [HttpPost]
         public IActionResult CreateUser([FromBody] CreateUserRequest createUserRequest)
         {
             var user = _userService.CreateUser(createUserRequest.Name, createUserRequest.Email);
-            return Ok(user);
+            if(user == null) return NotFound();
+            return Ok("User Created");
         }
         [HttpPut("{id:guid}")]
         public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest updateUserRequest)

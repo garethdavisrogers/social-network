@@ -22,11 +22,7 @@ namespace SocialNetworkV1.Services
         public User GetUser(Guid id) 
         {
             var user = _userDb.users.Find(id);
-            if (user == null) 
-            {
-                return new User("None", "Found");
-            }
-            return new User("user1", "user@example.com");
+            return user;
         }
 
         public User CreateUser(string name, string email) 
@@ -43,8 +39,8 @@ namespace SocialNetworkV1.Services
             {
                 userToUpdate.Name = name;
                 userToUpdate.Email = email;
+                _userDb.SaveChanges();
             }
-            _userDb.SaveChanges();
         }
 
         public void DeleteUser(Guid id) 
