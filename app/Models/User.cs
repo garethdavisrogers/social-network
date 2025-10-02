@@ -2,7 +2,7 @@
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public string Name { get; set; }
 
@@ -15,7 +15,6 @@
         public List<Guid> Messages { get; set; } = new List<Guid>();
         public User(string name, string email) 
         {
-            Id = Guid.Empty;
             Name = name;
             Email = email;
         }

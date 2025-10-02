@@ -7,8 +7,8 @@ namespace SocialNetworkV1.Services
     {
         User? GetUser(Guid id);
         User CreateUser(string name, string email);
-        void UpdateUser(Guid id, string? name, string? email);
-        void DeleteUser(Guid id);
+        User? UpdateUser(Guid id, string? name, string? email);
+        bool DeleteUser(Guid id);
     }
     public class UserService: IUserService
     {
@@ -29,27 +29,38 @@ namespace SocialNetworkV1.Services
         {
             var createdUser = new User(name, email);
             _userDb.users.Add(createdUser);
+            var created = _userDb.SaveChanges();
+            Console.WriteLine(created);
             return createdUser;
         }
 
-        public void UpdateUser(Guid id, string? name, string? email) 
+        public User? UpdateUser(Guid id, string? name, string? email) 
         { 
             var userToUpdate = _userDb.users.Find(id);
-            if (userToUpdate != null) 
-            {
+            if (userToUpdate == null)
+                return null;
+
+            if (!string.IsNullOrWhiteSpace(name))
                 userToUpdate.Name = name;
+
+            if (!string.IsNullOrWhiteSpace(email))
                 userToUpdate.Email = email;
-                _userDb.SaveChanges();
-            }
+
+            _userDb.SaveChanges();
+
+            return userToUpdate;
         }
 
-        public void DeleteUser(Guid id) 
+        public bool DeleteUser(Guid id) 
         {
             var userToDelete = _userDb.users.Find(id);
             if (userToDelete != null) 
             {
                 _userDb.users.Remove(userToDelete);
+                _userDb.SaveChanges();
+                return true;
             }
+            return false;
         }
 
     }

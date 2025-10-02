@@ -1,9 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36429.23 d17.14
+VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkV1", "SocialNetworkV1.csproj", "{FE5CA4F9-3FA7-40A3-A281-C6B0697C0ADC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialNetworkV1", "app\SocialNetworkV1.csproj", "{B05293BD-9652-470E-35F5-5FCEAE166096}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		docker-compose.yml = docker-compose.yml
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +19,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FE5CA4F9-3FA7-40A3-A281-C6B0697C0ADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE5CA4F9-3FA7-40A3-A281-C6B0697C0ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE5CA4F9-3FA7-40A3-A281-C6B0697C0ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE5CA4F9-3FA7-40A3-A281-C6B0697C0ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B05293BD-9652-470E-35F5-5FCEAE166096}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B05293BD-9652-470E-35F5-5FCEAE166096}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B05293BD-9652-470E-35F5-5FCEAE166096}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B05293BD-9652-470E-35F5-5FCEAE166096}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
