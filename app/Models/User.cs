@@ -1,22 +1,23 @@
-﻿namespace SocialNetworkV1.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace SocialNetworkV1.Models
 {
-    public class User
+    public class User: IdentityUser<Guid>
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         public string Name { get; set; }
-
-        public string Email { get; set; }
 
         public List<Guid> Connects { get; set; } = new List<Guid>();
 
         public List<Guid> Posts { get; set; } = new List<Guid>();
 
         public List<Guid> Messages { get; set; } = new List<Guid>();
-        public User(string name, string email) 
+
+        public User() : base() { }
+        public User(string name, string email) : base() 
         {
             Name = name;
             Email = email;
+            UserName = email;
         }
 
     }

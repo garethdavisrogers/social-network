@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using SocialNetworkV1.Data;
 using SocialNetworkV1.Models;
 using SocialNetworkV1.Services;
@@ -13,6 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<UserDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddIdentityCore<User>(options => { })
+    .AddRoles<IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<UserDb>()
+    .AddSignInManager();
 
 var app = builder.Build();
 
@@ -30,6 +34,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

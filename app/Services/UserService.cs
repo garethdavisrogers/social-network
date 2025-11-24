@@ -1,66 +1,86 @@
 ﻿using SocialNetworkV1.Models;
 using SocialNetworkV1.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace SocialNetworkV1.Services
 {
     public interface IUserService 
     {
-        User? GetUser(Guid id);
-        User CreateUser(string name, string email);
-        User? UpdateUser(Guid id, string? name, string? email);
-        bool DeleteUser(Guid id);
+        Task<User?> GetUserAsync(Guid id);
+        Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string name, string email, string password);
+        Task<User?> UpdateUserAsync(Guid id, string? name, string? email);
+        Task<bool> DeleteUserAsync(Guid id);
     }
     public class UserService: IUserService
     {
-        private UserDb _userDb;
+        private readonly UserManager<User> _userManager;
+        private readonly UserDb _userDb;
 
-        public UserService(UserDb userDb)
+        public UserService(UserManager<User> userManager, UserDb userDb)
         {
+            _userManager = userManager;
             _userDb = userDb;
         }
 
-        public User GetUser(Guid id) 
+        public async Task<User?> GetUserAsync(Guid id) 
         {
-            var user = _userDb.users.Find(id);
+            return await _userManager.FindByIdAsync(id.ToString());
+        }
+
+        public async Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string name, string email, string password) 
+        {
+            var user = new User {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Email = email,
+                UserName = email
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return (false, errors, null);
+            }
+
+            return (true, Enumerable.Empty<string>(), user);
+        }
+
+        public async Task<User?> UpdateUserAsync(Guid id, string? name, string? email) 
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return null;
+
+            if (!string.IsNullOrWhiteSpace(name)) 
+            {
+                user.Name = name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(email)) 
+            {
+                user.Email = email;
+                user.UserName = email;
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded) 
+            {
+                return null;
+            }
             return user;
         }
 
-        public User CreateUser(string name, string email) 
+        public async Task<bool> DeleteUserAsync(Guid id) 
         {
-            var createdUser = new User(name, email);
-            _userDb.users.Add(createdUser);
-            var created = _userDb.SaveChanges();
-            Console.WriteLine(created);
-            return createdUser;
-        }
-
-        public User? UpdateUser(Guid id, string? name, string? email) 
-        { 
-            var userToUpdate = _userDb.users.Find(id);
-            if (userToUpdate == null)
-                return null;
-
-            if (!string.IsNullOrWhiteSpace(name))
-                userToUpdate.Name = name;
-
-            if (!string.IsNullOrWhiteSpace(email))
-                userToUpdate.Email = email;
-
-            _userDb.SaveChanges();
-
-            return userToUpdate;
-        }
-
-        public bool DeleteUser(Guid id) 
-        {
-            var userToDelete = _userDb.users.Find(id);
-            if (userToDelete != null) 
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null) 
             {
-                _userDb.users.Remove(userToDelete);
-                _userDb.SaveChanges();
-                return true;
+                return false;
             }
-            return false;
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
         }
 
     }
