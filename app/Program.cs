@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SocialNetworkV1.Data;
@@ -5,6 +6,8 @@ using SocialNetworkV1.Models;
 using SocialNetworkV1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
 
 // Add services to the container.
 builder.Services.AddControllers();
