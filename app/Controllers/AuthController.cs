@@ -32,29 +32,20 @@ namespace SocialNetworkV1.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> LoginUser([FromBody] LoginUserRequest req) 
+        public async Task<ActionResult<LoginUserResponse>> LoginUser([FromBody] LoginUserRequest req) 
         {
             if (string.IsNullOrWhiteSpace(req.UserNameOrEmail) || string.IsNullOrWhiteSpace(req.Password))
             {
                 return BadRequest("Name or email, and password are required.");
             }
-            var (success, token, errors) = await _authService.LoginUserAsync(req.UserNameOrEmail, req.Password);
-            if (!success) 
+            var (success, token, errors, user) = await _authService.LoginUserAsync(req.UserNameOrEmail, req.Password);
+            if (!success || token == null || user == null) 
             {
                 return BadRequest(new { errors });
             }
-            return CreatedAtRoute("GetUserById", token);
+            var resp = new LoginUserResponse(user.Id, user.Name, user.Email!, token);
+            return resp;
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
-        {
-            var deletedSuccessfully = await _userService.DeleteUserAsync(id);
-            if (!deletedSuccessfully)
-            {
-                return BadRequest("Something went wrong.");
-            }
-            return Ok();
-        }
     }
 }
