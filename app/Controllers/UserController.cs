@@ -22,22 +22,6 @@ namespace SocialNetworkV1.Controllers
             var resp = new GetUserResponse(user.Id, user.Name, user.Email!, user.Posts);
             return Ok(resp);
         }
-        [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody] CreateUserRequest req)
-        {
-            if (string.IsNullOrWhiteSpace(req.Name) || string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password)) 
-            {
-                return BadRequest("Name, email, and password are required.");
-            }
-            var (success, errors, user) =  await _userService.RegisterUserAsync(req.Name, req.Email, req.Password);
-            if (!success || user == null) 
-            { 
-                return BadRequest(new { errors });
-            }
-
-            var resp = new GetUserResponse(user.Id, user.Name, user.Email!, user.Posts);
-            return CreatedAtAction(nameof(GetUser), new {id = user.Id }, resp);
-        }
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest updateUserRequest)
