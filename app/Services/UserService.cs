@@ -7,7 +7,6 @@ namespace SocialNetworkV1.Services
     public interface IUserService 
     {
         Task<User?> GetUserAsync(Guid id);
-        Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string name, string email, string password);
         Task<User?> UpdateUserAsync(Guid id, string? name, string? email);
         Task<bool> DeleteUserAsync(Guid id);
     }
@@ -23,25 +22,6 @@ namespace SocialNetworkV1.Services
         public async Task<User?> GetUserAsync(Guid id) 
         {
             return await _userManager.FindByIdAsync(id.ToString());
-        }
-
-        public async Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string name, string email, string password) 
-        {
-            var user = new User {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Email = email,
-                UserName = email
-            };
-
-            var result = await _userManager.CreateAsync(user, password);
-            if (!result.Succeeded)
-            {
-                var errors = result.Errors.Select(e => e.Description);
-                return (false, errors, null);
-            }
-
-            return (true, Enumerable.Empty<string>(), user);
         }
 
         public async Task<User?> UpdateUserAsync(Guid id, string? name, string? email) 

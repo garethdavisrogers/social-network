@@ -36,10 +36,7 @@ namespace SocialNetworkV1.Tests.Services
 
             userManagerMock.Setup(m => m.FindByIdAsync(userId.ToString())).ReturnsAsync(user);
 
-            // UserDb is never used, so this is fine:
-            var userDbMock = new Mock<UserDb>(new DbContextOptions<UserDb>());
-
-            var sut = new UserService(userManagerMock.Object, userDbMock.Object);
+            var sut = new UserService(userManagerMock.Object);
 
             // Act
             var result = await sut.GetUserAsync(userId);
@@ -47,6 +44,23 @@ namespace SocialNetworkV1.Tests.Services
             // Assert
             Assert.NotNull(result);
             Assert.Equal(userId, result!.Id);
+
+        }
+
+        [Fact]
+        public async Task GetUserAsync_ReturnsNull_WhenUserDoesNotExist()
+        {
+            var userManagerMock = CreateUserManagerMock();
+
+            var userId = Guid.NewGuid();
+
+            var sut = new UserService(userManagerMock.Object);
+
+            // Act
+            var result = await sut.GetUserAsync(userId);
+
+            // Assert
+            Assert.Null(result);
 
         }
 
