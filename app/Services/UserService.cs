@@ -14,12 +14,10 @@ namespace SocialNetworkV1.Services
     public class UserService: IUserService
     {
         private readonly UserManager<User> _userManager;
-        private readonly UserDb _userDb;
 
-        public UserService(UserManager<User> userManager, UserDb userDb)
+        public UserService(UserManager<User> userManager)
         {
             _userManager = userManager;
-            _userDb = userDb;
         }
 
         public async Task<User?> GetUserAsync(Guid id) 
