@@ -6,7 +6,7 @@ namespace SocialNetworkV1.Services
 {
     public interface IAuthService
     {
-        Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string name, string email, string password);
+        Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string email, string password);
         Task<(bool success, string? token, IEnumerable<string> errors, User? user)> LoginUserAsync(string userNameOrEmail, string password);
 
     }
@@ -22,12 +22,12 @@ namespace SocialNetworkV1.Services
         }
 
 
-        public async Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string name, string email, string password)
+        public async Task<(bool Success, IEnumerable<string> Errors, User? User)> RegisterUserAsync(string email, string password)
         {
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                Name = name,
+                Name = email,
                 Email = email,
                 UserName = email
             };
@@ -46,7 +46,7 @@ namespace SocialNetworkV1.Services
         {
             var user =  await _userManager.FindByEmailAsync(userNameOrEmail) ?? await _userManager.FindByNameAsync(userNameOrEmail);
 
-            if (user == null) return (false, null, new[] { "Invalid UserName or Email" }, null);
+            if (user == null) return (false, null, new[] { "Invalid Email" }, null);
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
             if (!result.Succeeded)

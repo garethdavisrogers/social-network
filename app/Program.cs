@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SocialNetworkV1.Data;
@@ -16,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<UserDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddIdentityCore<User>(options => { })
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<UserDb>()

@@ -13,7 +13,7 @@ namespace SocialNetworkV1.Controllers
         private readonly IUserService _userService;
         public UserController(IUserService userService) => _userService = userService;
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id:guid}", Name = "GetUserById")]
         public async Task<ActionResult<GetUserResponse>> GetUser(Guid id)
         {
             var user = await _userService.GetUserAsync(id);

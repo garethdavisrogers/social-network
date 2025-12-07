@@ -14,14 +14,14 @@ namespace SocialNetworkV1.Controllers
         private readonly IAuthService _authService;
         public AuthController(IAuthService authService) => _authService = authService;
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] CreateUserRequest req)
         {
-            if (string.IsNullOrWhiteSpace(req.Name) || string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
+            if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
             {
-                return BadRequest("Name, email, and password are required.");
+                return BadRequest("Email, and Password are required.");
             }
-            var (success, errors, user) = await _authService.RegisterUserAsync(req.Name, req.Email, req.Password);
+            var (success, errors, user) = await _authService.RegisterUserAsync(req.Email, req.Password);
             if (!success || user == null)
             {
                 return BadRequest(new { errors });
@@ -31,7 +31,7 @@ namespace SocialNetworkV1.Controllers
             return CreatedAtRoute("GetUserById", new { id = user.Id }, resp);
         }
 
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<ActionResult<LoginUserResponse>> LoginUser([FromBody] LoginUserRequest req) 
         {
             if (string.IsNullOrWhiteSpace(req.UserNameOrEmail) || string.IsNullOrWhiteSpace(req.Password))
