@@ -13,8 +13,8 @@ using SocialNetworkV1.Data;
 namespace SocialNetworkV1.Migrations
 {
     [DbContext(typeof(UserDb))]
-    [Migration("20251125171259_InitialIdentity")]
-    partial class InitialIdentity
+    [Migration("20251207230916_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
