@@ -34,11 +34,11 @@ namespace SocialNetworkV1.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginUserResponse>> LoginUser([FromBody] LoginUserRequest req) 
         {
-            if (string.IsNullOrWhiteSpace(req.UserNameOrEmail) || string.IsNullOrWhiteSpace(req.Password))
+            if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
             {
                 return BadRequest("Name or email, and password are required.");
             }
-            var (success, token, errors, user) = await _authService.LoginUserAsync(req.UserNameOrEmail, req.Password);
+            var (success, token, errors, user) = await _authService.LoginUserAsync(req.Email, req.Password);
             if (!success || token == null || user == null) 
             {
                 return BadRequest(new { errors });

@@ -23,10 +23,12 @@ builder.Services.AddIdentityCore<User>(options => { })
 
 builder.Services.AddCors(options => 
 {
-    options.AddPolicy("Frontend", policy => 
+    options.AddPolicy("FrontEnd", policy => 
     {
         policy
-        .WithOrigins("http://localhost:5173")
+        .WithOrigins(
+            "http://localhost:5173",
+            "http://127.0.0.1:5173")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials();
@@ -47,6 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("FrontEnd");
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
