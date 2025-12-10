@@ -4,13 +4,13 @@ namespace SocialNetworkV1.Models
 {
     public class User: IdentityUser<Guid>
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public List<Guid> Connects { get; set; } = new List<Guid>();
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
 
-        public List<Guid> Posts { get; set; } = new List<Guid>();
+        public ICollection<Friendship> Friendships { get; set; } = new List<Friendship>();
 
-        public List<Guid> Messages { get; set; } = new List<Guid>();
+        public ICollection<Friendship> FriendedBy { get; set; } = new List<Friendship>();
 
         public User() : base() { }
         public User(string name, string email) : base() 

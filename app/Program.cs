@@ -12,13 +12,13 @@ builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<UserDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<SocialNetworkDb>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddIdentityCore<User>(options => { })
     .AddRoles<IdentityRole<Guid>>()
-    .AddEntityFrameworkStores<UserDb>()
+    .AddEntityFrameworkStores<SocialNetworkDb>()
     .AddSignInManager();
 
 builder.Services.AddCors(options => 
@@ -39,7 +39,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<UserDb>();
+    var db = scope.ServiceProvider.GetRequiredService<SocialNetworkDb>();
     db.Database.Migrate(); // requires EF.Design + created migrations
 }
 // Configure the HTTP request pipeline.
