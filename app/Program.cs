@@ -21,9 +21,9 @@ builder.Services.AddIdentityCore<User>(options => { })
     .AddEntityFrameworkStores<SocialNetworkDb>()
     .AddSignInManager();
 
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
 {
-    options.AddPolicy("FrontEnd", policy => 
+    options.AddPolicy("FrontEnd", policy =>
     {
         policy
         .WithOrigins(
@@ -50,7 +50,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("FrontEnd");
-app.UseHttpsRedirection();
+
+if (!app.Environment.IsDevelopment()) 
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

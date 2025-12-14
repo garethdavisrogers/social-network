@@ -10,7 +10,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       # ASP.NET binds to 8080/8081 already in your Dockerfile
-      ASPNETCORE_URLS: http://+:8080
+      ASPNETCORE_URLS: http://0.0.0.0:8080
       # Connection string: host is the *service name* "db"
       ConnectionStrings__Default: Host=db;Port=5432;Database=userdb;Username=postgres;Password=postgres
     depends_on:

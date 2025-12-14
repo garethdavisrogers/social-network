@@ -17,11 +17,11 @@ namespace SocialNetworkV1.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] CreateUserRequest req)
         {
-            if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
+            if (string.IsNullOrWhiteSpace(req.email) || string.IsNullOrWhiteSpace(req.password))
             {
                 return BadRequest("Email, and Password are required.");
             }
-            var (success, errors, user) = await _authService.RegisterUserAsync(req.Email, req.Password);
+            var (success, errors, user) = await _authService.RegisterUserAsync(req.email, req.password);
             if (!success || user == null)
             {
                 return BadRequest(new { errors });
@@ -34,11 +34,11 @@ namespace SocialNetworkV1.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<LoginUserResponse>> LoginUser([FromBody] LoginUserRequest req) 
         {
-            if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
+            if (string.IsNullOrWhiteSpace(req.email) || string.IsNullOrWhiteSpace(req.password))
             {
                 return BadRequest("Name or email, and password are required.");
             }
-            var (success, token, errors, user) = await _authService.LoginUserAsync(req.Email, req.Password);
+            var (success, token, errors, user) = await _authService.LoginUserAsync(req.email, req.password);
             if (!success || token == null || user == null) 
             {
                 return BadRequest(new { errors });

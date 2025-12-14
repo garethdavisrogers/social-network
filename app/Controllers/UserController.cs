@@ -26,7 +26,7 @@ namespace SocialNetworkV1.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequest updateUserRequest)
         {
-            var updatedUser = await _userService.UpdateUserAsync(id, updateUserRequest.Name, updateUserRequest.Email);
+            var updatedUser = await _userService.UpdateUserAsync(id, updateUserRequest.name, updateUserRequest.email);
             if(updatedUser == null) return NotFound();
 
             var resp = new GetUserResponse(updatedUser.Id, updatedUser.Name, updatedUser.Email!, updatedUser.Posts);

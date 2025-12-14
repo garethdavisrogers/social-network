@@ -17,11 +17,11 @@ namespace SocialNetworkV1.Controllers
         [HttpPost("CreatePost")]
         public async Task<IActionResult> CreatePost([FromBody] CreateUserRequest req)
         {
-            if (string.IsNullOrWhiteSpace(req.Email) || string.IsNullOrWhiteSpace(req.Password))
+            if (string.IsNullOrWhiteSpace(req.email) || string.IsNullOrWhiteSpace(req.password))
             {
                 return BadRequest("Email, and Password are required.");
             }
-            var (success, errors, user) = await _authService.RegisterUserAsync(req.Email, req.Password);
+            var (success, errors, user) = await _authService.RegisterUserAsync(req.email, req.password);
             if (!success || user == null)
             {
                 return BadRequest(new { errors });

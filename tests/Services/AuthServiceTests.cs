@@ -71,13 +71,12 @@ namespace SocialNetworkV1.Tests.Services
             var sut = new AuthService(userManagerMock.Object, signInManagerMock.Object);
 
             // Act
-            var (success, errors, createdUser) = await sut.RegisterUserAsync(name, email, password);
+            var (success, errors, createdUser) = await sut.RegisterUserAsync(email, password);
 
             // Assert
             Assert.True(success);
             Assert.Empty(errors);
             Assert.NotNull(createdUser);
-            Assert.Equal(name, createdUser!.Name);
             Assert.Equal(email, createdUser.Email);
 
             userManagerMock.Verify(m =>
